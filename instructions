@@ -1,0 +1,89 @@
+1. Check to make sure that a repo has not been setup. Also Make sure that this folder isnt nested inside of a folder that already has a repo setup for it.
+   -> In your terminal type: ls -al
+   -> cd back up to parent folders if needed to check them as well.
+
+2. Run this command in your terminal (as long as no repo has been setup): git init
+
+3. Run this command in your terminal after initialization: mkdir server
+
+4. Then run: npx create-react-app client
+   -> This is the best practices naming convention going forward.
+   -> When you run: npx create-react-app client, React would normally initialize or create a git-repo for you. Since we did this already, it knows to skip doing it for us.
+
+5. Create a .gitignore in the root folder of your project.
+   -> In .gitignore add: node_modules/
+   -> Our client folder, which holds our react-app has a gitignore file as well. We created our root .gitignore b/c our server folder will also get a node_modules folder
+
+6. Create server.js inside your server folder
+   -> once done: cd into your server folder
+
+7. Run: npm init -y
+   -> This generates our package.json file (make sure in this .json file, that next to "main" : it has "server.js")
+
+8. Run: npm install express mongoose (_NOTE: SEE STEP-16_ It has you install cors then, that can be done on this step)
+
+9. Go to your github acct. and create a new repo. Give the new repo the same name as the root folder we are working in. In this case it would be 'full_stack_mern'
+   -> Once created, under the section with your 'git push' instructions, copy the remote add path, ex: git remote add origin https://github.com/JacksonMurphey/full_stack_mern.git
+   -> cd from your server folder back to our root folder 'FULL_STACK_MERN'
+
+10. Run: git remote add origin https://github.com/JacksonMurphey/full_stack_mern.git (we get this line from our github repo creation instructions under the push instructions)
+    -> Once you have run this line, to ensure it ran correctly, run: git remote
+    -> it should return: origin (This lets you know it worked)
+
+11. Run: git add .
+
+12. Run: git commit -m "first commit"
+
+13. Run: git push (This will return an error fatal. In turn it will give us the correct push command to input)
+    -> After you run the above line, you will get something back that looks like: git push --set-upstream origin master
+    -> Going forward, anytime you add to this project or make changes that you want to push to git, see the steps below:
+    --> _Click on the 'Source Control' tab in VScode_
+    --> _On the Changes Drop-down click the Plus(+) Icon to STAGE your changes_
+    --> _Leave a message about what has been updated/changed_
+    --> _Now, Above where you entered your message (where it says Source Control):_
+    ...-> click the check-mark to submit the Staged files
+    --> _CD into the root folder (if not already there):_
+    ...-> Then run 'git push' and boom, your new files will be pushed to your git repo.
+
+(_NOTE:_ Step 14 is a bit redundant now that I have updated Step 13 with the additional steps)
+
+14. Run 'git push' after creating new files or after making changes to current ones. This will push the changes to the repo we have created.(This works after you have staged the files)
+
+15. cd into your client folder, run: npm install axios @reach/router --legacy-peer-deps
+    (As we move to using React Router instead of Reach, run: npm install axios react-router-dom)
+
+(_NOTE:_ Step 16, could be completed while doing step 8:)
+
+16. cd into your server folder, run: npm install cors
+
+_--- Adding New Packages For Login/Registration ---_
+
+17. Cd into your server folder
+    --> run: npm install bcrypt cookie-parser dotenv jsonwebtoken
+
+18. Set up environment file (to hide our private information).
+    --> create .env file in the server folder
+    --> In this file we will put:
+
+    - MY_PORT = 8000
+    - DB_NAME = "<your db_name>"
+    - JWT_SECRET = "<name of your jwt_secret>"
+
+    --> Open .gitignore and add: '.env' (this is so that when we push to github, this file will not be pushed)
+
+19. Replace any references in our current code with our newly created variables for them
+    --> So we would need to find where we defined "port" and "dbName", and replace with "MY_PORT" and "DB_NAME"
+
+20. Create a new User Model
+    --> Include the following fields: username, email, password
+    --> Include validations for each: required, minlength, etc.
+    --> Include a special validation for 'password' matching a 'confirm password'
+    --> Use bcrypt to encrypt the password so it can never be un-encrypted
+
+21. Set up a Controller for login/registration/logout
+    --> User Registration
+    --> login method should make sure that email is in DB and their provided password 'matches' the hashed pw stored
+    --> login method should return a special cookie, with a signed jwt(javascript web-token)
+    --> logout should clear the jwt cookie from the server
+
+22. Wire up necessary changes in server.js
